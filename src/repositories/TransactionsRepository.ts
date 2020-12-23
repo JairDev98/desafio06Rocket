@@ -15,6 +15,8 @@ class TransactionsRepository extends Repository<Transaction> {
     const transactionsRepository = getRepository(Transaction);
     const transactions = await transactionsRepository.find();
 
+    const nTransactions = transactions;
+
     transactions.map(async transaction => {
       const categorysRepository = getRepository(Category);
 
@@ -37,14 +39,31 @@ class TransactionsRepository extends Repository<Transaction> {
         updated_at,
       };
 
-      transactions[transactionIndex] = vTransaction;
+      nTransactions[transactionIndex] = vTransaction;
     });
 
-    return transactions;
+    return nTransactions;
   }
 
-  public getBalance(): Promise<Balance> {
-    // TODO
+  public async getBalance(): Promise<Balance> {
+    const transactionsRepository = getRepository(Transaction);
+    const transactions = await transactionsRepository.find();
+
+    const income = transactions
+      .filter(transaction => transaction.type === 'income')
+      .map(transactionIncome => transactionIncome.value)
+      .reduce((total, value) => total + value, 0);
+
+    const outcome = transactions
+      .filter(transaction => transaction.type === 'outcome')
+      .map(transactionOutcome => transactionOutcome.value)
+      .reduce((total, value) => total + value, 0);
+
+    const total = income - outcome;
+
+    const balance = { income, outcome, total };
+
+    return balance;
   }
 }
 

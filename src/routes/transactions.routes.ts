@@ -16,7 +16,9 @@ transactionsRouter.get('/', async (request, response) => {
   const transactionRepository = new TransactionsRepository();
   const transactions = await transactionRepository.all();
 
-  return response.json({ transactions });
+  const balance = await transactionRepository.getBalance();
+
+  return response.json({ transactions, balance });
 });
 
 transactionsRouter.post('/', async (request, response) => {
@@ -42,15 +44,15 @@ transactionsRouter.delete('/:id', async (request, response) => {
 
 transactionsRouter.post(
   '/import',
-  upload.single('archive'),
+  upload.single('file'),
   async (request, response) => {
     const importTransactionService = new ImportTransactionsService();
 
-    await importTransactionService.execute({
-      archiveFile: request.file.filename,
-    });
+    const transactions = await importTransactionService.execute(
+      request.file.path,
+    );
 
-    return response.json({ ok: true });
+    return response.json(transactions);
   },
 );
 

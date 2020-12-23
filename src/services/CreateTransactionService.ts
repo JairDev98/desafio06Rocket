@@ -4,6 +4,10 @@ import { getRepository } from 'typeorm';
 import Transaction from '../models/Transaction';
 import Category from '../models/Category';
 
+import AppError from '../errors/AppError';
+
+import TransactionsRepository from '../repositories/TransactionsRepository';
+
 interface Request {
   title: string;
   value: number;
@@ -18,6 +22,14 @@ class CreateTransactionService {
     type,
     category,
   }: Request): Promise<Transaction> {
+    const transactionRepo = new TransactionsRepository();
+
+    const { total } = await transactionRepo.getBalance();
+
+    if (type === 'outcome' && value > total) {
+      throw new AppError('insufficient total for outcome to be realized', 400);
+    }
+
     // VERIFICAÇÃO DA CATEGORY ( SE UMA CATERORIA COM ESSE NOME JÁ EXISTE NO TABELA CATEROY NA BASE DE DADOS )
     const categoryRepository = getRepository(Category);
 
