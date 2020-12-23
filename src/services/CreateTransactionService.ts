@@ -46,11 +46,6 @@ class CreateTransactionService {
       await categoryRepository.save(newCategory);
     }
 
-    // SE EXISTIR EU PEGO O ID DA CATEGORY EXISTENTE
-    const regCategory = await categoryRepository.findOne({
-      where: { title: category },
-    });
-
     // VAI SER EFETUADO O RETORNO DA TRANSACTION PARA O USUÁRIO, TANTO CATEGORY COMO TRANSACTION SEM AS IDS
     const transactionRepository = getRepository(Transaction);
 
@@ -58,7 +53,7 @@ class CreateTransactionService {
       title,
       type,
       value,
-      category_id: regCategory?.id,
+      category: categoryExists,
     });
 
     await transactionRepository.save(transaction);

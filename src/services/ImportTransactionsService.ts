@@ -10,8 +10,8 @@ import TransactionsRepository from '../repositories/TransactionsRepository';
 
 interface CSVTransaction {
   title: string;
-  type: 'income' | 'outcome';
   value: number;
+  type: 'income' | 'outcome';
   category: string;
 }
 
@@ -32,15 +32,15 @@ class ImportTransactionsService {
     const categories: string[] = [];
 
     parseCSV.on('data', async line => {
-      const [title, type, value, category] = line.map((cell: string) =>
+      const [title, value, type, category] = line.map((cell: string) =>
         cell.trim(),
       );
 
-      if (!title || !type || !value) return;
+      if (!title || !value || !type) return;
 
       categories.push(category);
 
-      transactions.push({ title, type, value, category });
+      transactions.push({ title, value, type, category });
     });
 
     await new Promise(resolve => parseCSV.on('end', resolve));
