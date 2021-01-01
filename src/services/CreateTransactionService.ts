@@ -2,7 +2,7 @@
 import { getRepository } from 'typeorm';
 
 import Transaction from '../models/Transaction';
-import Category from '../models/Category';
+import Category from '../models/Categories';
 
 import AppError from '../errors/AppError';
 
@@ -37,7 +37,7 @@ class CreateTransactionService {
       where: { title: category },
     });
 
-    // SE NÃO EU FAÇO O CADASTRO DESTA CATEGORY E LOGO APÓS PEGO O NÚMERO DO SEU ID
+    // SE NÃO EXISTIR EU FAÇO O CADASTRO DESTA CATEGORY E LOGO APÓS PEGO O NÚMERO DO SEU ID
     if (!categoryExists) {
       const newCategory = categoryRepository.create({
         title: category,

@@ -1,7 +1,7 @@
 import { EntityRepository, Repository, getRepository } from 'typeorm';
 
 import Transaction from '../models/Transaction';
-import Category from '../models/Category';
+import Category from '../models/Categories';
 
 interface Balance {
   income: number;

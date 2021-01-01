@@ -4,7 +4,7 @@ import csvParse from 'csv-parse';
 import fs from 'fs';
 
 import Transaction from '../models/Transaction';
-import Category from '../models/Category';
+import Category from '../models/Categories';
 
 import TransactionsRepository from '../repositories/TransactionsRepository';
 
