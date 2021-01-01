@@ -13,9 +13,8 @@ interface Balance {
 class TransactionsRepository extends Repository<Transaction> {
   public async all(): Promise<Transaction[]> {
     const transactionsRepository = getRepository(Transaction);
-    const transactions = await transactionsRepository.find();
 
-    const nTransactions = transactions;
+    const transactions = await transactionsRepository.find();
 
     transactions.map(async transaction => {
       const categorysRepository = getRepository(Category);
@@ -39,10 +38,10 @@ class TransactionsRepository extends Repository<Transaction> {
         updated_at,
       };
 
-      nTransactions[transactionIndex] = vTransaction;
+      transactions[transactionIndex] = vTransaction;
     });
 
-    return nTransactions;
+    return transactions;
   }
 
   public async getBalance(): Promise<Balance> {
