@@ -46,6 +46,10 @@ class CreateTransactionService {
       await categoryRepository.save(newCategory);
     }
 
+    const categoryID = await categoryRepository.findOne({
+      where: { title: category },
+    });
+
     // VAI SER EFETUADO O RETORNO DA TRANSACTION PARA O USUÁRIO, TANTO CATEGORY COMO TRANSACTION SEM AS IDS
     const transactionRepository = getRepository(Transaction);
 
@@ -53,7 +57,7 @@ class CreateTransactionService {
       title,
       type,
       value,
-      category: categoryExists,
+      category: categoryID,
     });
 
     await transactionRepository.save(transaction);
